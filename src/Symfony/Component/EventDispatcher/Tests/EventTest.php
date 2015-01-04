@@ -60,17 +60,6 @@ class EventTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->event->isPropagationStopped());
     }
 
-    public function testSetDispatcher()
-    {
-        $this->event->setDispatcher($this->dispatcher);
-        $this->assertSame($this->dispatcher, $this->event->getDispatcher());
-    }
-
-    public function testGetDispatcher()
-    {
-        $this->assertNull($this->event->getDispatcher());
-    }
-
     public function testGetName()
     {
         $this->assertNull($this->event->getName());
