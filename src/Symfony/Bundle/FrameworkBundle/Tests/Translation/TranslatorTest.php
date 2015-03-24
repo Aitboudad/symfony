@@ -243,6 +243,20 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
         return $translator;
     }
+
+    public function testWarmup()
+    {
+        $loader = new \Symfony\Component\Translation\Loader\YamlFileLoader();
+        $resourceFiles = array(
+            __DIR__.'/../Fixtures/Resources/translations/messages.fr.yml',
+        );
+
+        // prime the cache
+        $translator = $this->getTranslator($loader, array('cache_dir' => $this->tmpDir), $resourceFiles, 'yml');
+        $this->assertFalse(file_exists($this->tmpDir . '/catalogue.fr.php'));
+        $translator->warmup($this->tmpDir);
+        $this->assertTrue(file_exists($this->tmpDir . '/catalogue.fr.php'));
+    }
 }
 
 class TranslatorWithInvalidLocale extends Translator
