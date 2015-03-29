@@ -698,12 +698,22 @@ class FrameworkExtension extends Extension
                 ->in($dirs)
             ;
 
+            $locales = array();
             foreach ($finder as $file) {
                 list($domain, $locale, $format) = explode('.', $file->getBasename(), 3);
-                $files[] = (string) $file;
+                if (!isset($files[$locale])) {
+                    $files[$locale] = array();
+                }
+
+                $files[$locale][] = (string) $file;
             }
 
-            $translator->replaceArgument(4, $files);
+            $options = array_merge(
+                $translator->getArgument(3),
+                array('resource_files' => $files)
+            );
+
+            $translator->replaceArgument(3, $options);
         }
     }
 
@@ -865,9 +875,9 @@ class FrameworkExtension extends Extension
     /**
      * Loads the serializer configuration.
      *
-     * @param array            $config A serializer configuration array
+     * @param array            $config    A serializer configuration array
      * @param ContainerBuilder $container A ContainerBuilder instance
-     * @param XmlFileLoader    $loader An XmlFileLoader instance
+     * @param XmlFileLoader    $loader    An XmlFileLoader instance
      */
     private function registerSerializerConfiguration(array $config, ContainerBuilder $container, XmlFileLoader $loader)
     {
