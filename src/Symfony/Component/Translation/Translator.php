@@ -445,8 +445,10 @@ EOF
                 $this->doLoadCatalogue($fallback);
             }
 
-            $current->addFallbackCatalogue($this->catalogues[$fallback]);
-            $current = $this->catalogues[$fallback];
+            if (!$this->catalogues[$fallback]->getFallbackCatalogue() || $this->catalogues[$fallback]->getFallbackCatalogue()->getLocale() !== $current->getLocale()) {
+                $current->addFallbackCatalogue($this->catalogues[$fallback]);
+                $current = $this->catalogues[$fallback];
+            }
         }
     }
 
