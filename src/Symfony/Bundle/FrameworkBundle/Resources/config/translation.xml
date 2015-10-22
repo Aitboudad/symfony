@@ -160,5 +160,29 @@
             <argument type="service" id="translator" />
             <tag name="kernel.cache_warmer" />
         </service>
+
+        <service id="translation.translator" class="Symfony\Component\Translation\Translator">
+            <argument>%kernel.debug%</argument>
+            <argument type="service" id="translation.message_catalogue_provider.cache" />
+            <argument type="service" id="translator.selector" />
+        </service>
+
+        <service id="translation.message_catalogue_provider.resource" class="Symfony\Component\Translation\MessageCatalogueProvider\ContainerAwareResourceMessageCatalogueProvider" public="false">
+            <argument type="service" id="service_container" />
+            <argument type="collection" /> <!-- translation loaders -->
+            <argument type="collection" /> <!-- translation resources -->
+        </service>
+
+        <service id="translation.message_catalogue_provider.fallback" class="Symfony\Component\Translation\MessageCatalogueProvider\FallbackMessageCatalogueProvider" public="false">
+            <argument type="service" id="translation.message_catalogue_provider.resource" />
+            <argument type="collection" /> <!-- fallback locales -->
+        </service>
+
+        <service id="translation.message_catalogue_provider.cache" class="Symfony\Component\Translation\MessageCatalogueProvider\CacheMessageCatalogueProvider" public="false">
+            <argument type="service" id="translation.message_catalogue_provider.resource" />
+            <argument>%kernel.cache_dir%/translations</argument> <!-- cache directory -->
+            <argument>%kernel.debug%</argument>
+            <argument type="service" id="config_cache_factory" />
+        </service>
     </services>
 </container>
